@@ -33,7 +33,7 @@ public class ServeurTCP {
         try {
             // Création d'un socket serveur générique sur le port
             ServerSocket ssg = new ServerSocket(port);
-            System.out.println("Serveur démarré sur le port " + port);
+            System.out.println("Serveur TCP démarré sur le port " + port);
 
             while(true) {
                 // On attend une connexion puis on l'accepte
