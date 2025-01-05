@@ -3,6 +3,7 @@ package as_bis.serveurs;
 import as_bis.utilitaires.ListeAuth;
 
 public class ServeurAS {
+    /* Attributs du serveur AS */
     // Port des clients "checker"
     private int portChk;
 
