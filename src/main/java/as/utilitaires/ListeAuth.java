@@ -1,4 +1,5 @@
 package as.utilitaires;
+
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -28,52 +29,56 @@ public class ListeAuth {
 
     /**
      * création d'un couple (login, mot de passe)
-     * @param login : le login
+     *
+     * @param login  : le login
      * @param passwd : le mot de passe
      * @return true si ça c'est bien passé
      */
     public synchronized boolean creer(String login, String passwd) {
-        if(authEntries.containsKey(login))
+        if (authEntries.containsKey(login))
             return false; // le login est déjà présent
         authEntries.put(login, passwd); // on l'ajoute
         return true; // ça c'est bien passé
     }
 
     /**
-     *  mise à jour d'un couple (login, mot de passe)
-     * @param login : le login
+     * mise à jour d'un couple (login, mot de passe)
+     *
+     * @param login  : le login
      * @param passwd : le mot de passe
      * @return true si ça c'est bien passé
      */
     public synchronized boolean mettreAJour(String login, String passwd) {
-        if(!authEntries.containsKey(login))
+        if (!authEntries.containsKey(login))
             return false; // le login n'est pas présent
         authEntries.put(login, passwd); // on remplace le mot de passe
         return true; // ça c'est bien passé
     }
 
     /**
-     *  suppression d'un couple (login, mot de passe)
-     * @param login : le login
+     * suppression d'un couple (login, mot de passe)
+     *
+     * @param login  : le login
      * @param passwd : le mot de passe
      * @return true si ça c'est bien passé
      */
 
     public synchronized boolean supprimer(String login, String passwd) {
-        if(!tester(login, passwd))
+        if (!tester(login, passwd))
             return false; // le login ou le mot de passe ne sont pas corrects
         authEntries.remove(login); // on supprime le couple
         return true; // ça c'est bien passé
     }
 
     /**
-     *  test d'un couple (login, mot de passe)
-     * @param login : le login
+     * test d'un couple (login, mot de passe)
+     *
+     * @param login  : le login
      * @param passwd : le mot de passe
      * @return true si ça c'est bien passé
      */
     public synchronized boolean tester(String login, String passwd) {
-        if(!authEntries.containsKey(login))
+        if (!authEntries.containsKey(login))
             return false; // le login n'est pas présent
         if (authEntries.get(login).equals(passwd))
             return true; // le mot de passe est correct
@@ -83,11 +88,12 @@ public class ListeAuth {
 
     /**
      * Programme de test
+     *
      * @param args
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        ListeAuth la = new ListeAuth();
+        as.utilitaires.ListeAuth la = new as.utilitaires.ListeAuth();
         Scanner sc = new Scanner(System.in);
 
         while (true) {
@@ -139,7 +145,7 @@ public class ListeAuth {
                     sc.nextLine(); // saute le retour à la ligne
                     System.out.println("Tapez le mot de passe");
                     passwd = sc.next();
-                    if(!la.mettreAJour(login, passwd))
+                    if (!la.mettreAJour(login, passwd))
                         System.out.println("La paire n'existe pas!");
                     else
                         System.out.println("MAJ effectue.");

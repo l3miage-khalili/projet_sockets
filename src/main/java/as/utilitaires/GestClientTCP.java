@@ -1,6 +1,6 @@
-package as_bis.utilitaires;
+package as.utilitaires;
 
-import as_bis.clients.ClientTCP;
+import as.clients.ClientTCP;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -125,7 +125,9 @@ public class GestClientTCP extends ClientTCP implements Runnable {
 
             // on envoie la chaine au serveur
             sortieSocket.println(chaineEnJson);
+            System.out.println("-----------------------------------------------");
             System.out.println("Chaine envoyée au serveur L : " + chaineEnJson) ;
+            System.out.println("------------------------------------------------");
 
             // lecture d'une chaine envoyée à travers la connexion socket
             String retourServ = entreeSocket.readLine();

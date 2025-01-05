@@ -1,4 +1,4 @@
-package as_bis.clients;
+package as.clients;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

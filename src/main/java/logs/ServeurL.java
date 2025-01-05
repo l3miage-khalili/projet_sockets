@@ -23,14 +23,18 @@ public class ServeurL {
         try {
             // Création d'un socket serveur générique sur le port
             ServerSocket ssg = new ServerSocket(port);
+            System.out.println("-----------------------------------------");
             System.out.println("Serveur L démarré sur le port " + port);
 
             while(true) {
                 // On attend une connexion puis on l'accepte
                 System.out.println("En attente de connexions...");
+                System.out.println("-----------------------------------------");
 
                 Socket socketClient = ssg.accept();
+                System.out.println("----------------------------------------------------");
                 System.out.println("Connexion acceptée depuis " + socketClient.getInetAddress());
+                System.out.println("----------------------------------------------------");
 
                 // Gestion du client accepté
                 new Thread(() -> gererClient(socketClient)).start();

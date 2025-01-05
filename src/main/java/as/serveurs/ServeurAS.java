@@ -1,119 +1,64 @@
 package as.serveurs;
 
-import as.clients.ClientChkUDP;
 import as.utilitaires.ListeAuth;
-import as.utilitaires.ParserMessage;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 
 public class ServeurAS {
     /* Attributs en tant que serveur AS */
-    private int tailleTampon ;
 
-    private int portChecker;
+    // Port des clients "checker"
+    private int portChk;
 
-    private int portManager;
+    // Port des clients "manager"
+    private int portMng;
 
-    // joue le rôle du metier
+    // Le métier utilisé par les serveurs
     private ListeAuth listeAuth;
 
-    // utilise le metier pour traiter les requêtes du client
-    private ParserMessage parserMessage ;
+    /* Attributs en tant que client AS */
+    private String adresseMachineLog ;
+    private int portLog ;
 
-    // Socket UDP sur un port choisi par le système
-    private DatagramSocket socket ;
-
-    // tampon pour recevoir les données des datagrammes UDP
-    private final byte[] tampon = new byte[tailleTampon];
-
-    private DatagramPacket reception ;
-
-    // On veut envoyer les messages à la même machine
-    private InetAddress destination ;
-
-    /* Attributs en tant que client du serveur Log */
-    private ClientChkUDP clientChkUDP ;
-
-    public ServeurAS(int portChecker,
-                     int portManager,
-                     int tailleTampon,
-                     ListeAuth listeAuth,
-                     ParserMessage parserMessage,
-                     DatagramSocket socket,
-                     DatagramPacket reception,
-                     ClientChkUDP clientChkUDP
-    ) {
-        this.portChecker = portChecker;
-        this.portManager = portManager;
-        this.tailleTampon = tailleTampon;
+    public ServeurAS(int portChk, int portMng, ListeAuth listeAuth, String adresseMachineLog, int portLog) {
+        this.portChk = portChk;
+        this.portMng = portMng;
         this.listeAuth = listeAuth;
-        this.parserMessage = parserMessage;
-        this.socket = socket ;
-        this.reception = reception ;
-        this.clientChkUDP = clientChkUDP ;
+        this.adresseMachineLog = adresseMachineLog ;
+        this.portLog = portLog ;
     }
 
-    public static void main(String[] args) throws Exception {
-        int tailleTampon = 1024 ;
-        String adresseMachine = "localhost" ;
+    // demarrage d'un serveur TCP pour la gestion des clients TCP et d'un serveur UDP pour ceux d'UDP
+    public void demarrer() {
+        // démarrage de deux threads pour créer les serveurs TCP et UDP
+        new Thread(() -> gererServeurTCP()).start();
+        new Thread(() -> gererServeurUDP()).start();
+    }
 
-        /* Configuration serveur AS */
-        int portChecker = 28414 ;
-        int portManager = 28415 ;
+    // création et demarrage du serveur TCP
+    private void gererServeurTCP() {
+        ServeurTCP serveurTCP = new ServeurTCP(portChk, portMng, listeAuth, adresseMachineLog, portLog) ;
+        serveurTCP.demarrer();
+    }
+
+    // création et demarrage du serveur UDP
+    private void gererServeurUDP() {
+        ServeurUDP serveurUDP = new ServeurUDP(portChk, listeAuth) ;
+        serveurUDP.demarrer();
+    }
+
+    public static void main(String[] args) {
+        /* configuration du serveur AS multi-protocole */
+        int portChk = 28414 ;
+        int portMng = 28415 ;
         ListeAuth listeAuth = new ListeAuth() ;
-        ParserMessage parserMessage = new ParserMessage(listeAuth) ;
+        String adresseMachineLog = "localhost" ;
+        int portLog = 3244 ;
 
-        /* Configuration client AS */
-        int portDestination = 3244 ;
+        // Instanciation du serveur AS multi-protocole
+        ServeurAS serveurAS = new ServeurAS(portChk, portMng, listeAuth, adresseMachineLog, portLog) ;
 
-        /* Configuration UDP */
-
-        // Création d'un socket UDP sur un port choisi par le système
-        DatagramSocket socket = new DatagramSocket();
-
-        // tampon pour recevoir les données des datagrammes UDP
-        final byte[] tampon = new byte[tailleTampon];
-
-        DatagramPacket reception = new DatagramPacket(tampon, tampon.length);
-
-        // On veut envoyer les messages à la même machine
-        InetAddress destination = InetAddress.getByName(adresseMachine);
-
-        ClientChkUDP clientChkUDP = new ClientChkUDP(socket, reception, destination, portDestination, tampon) ;
-
-        ServeurAS serveurAS = new ServeurAS(
-                portChecker,
-                portManager,
-                tailleTampon,
-                listeAuth,
-                parserMessage,
-                socket,
-                reception,
-                clientChkUDP
-        ) ;
-
-        serveurAS.creerServeurs();
+        // demarrage du serveur AS et gestion des clients
+        serveurAS.demarrer();
     }
 
-    public void creerServeurs() throws Exception {
-        // Gestion des clients sur le serveur TCP
-        ServeurTCP serveurTCP = new ServeurTCP(portChecker, portManager, listeAuth) ;
-
-        Thread gererClientsTCP = new Thread(serveurTCP) ;
-        gererClientsTCP.start();
-
-        // Gestion des clients sur le serveur UDP
-        ServeurUDP serveurUDP = new ServeurUDP(
-                portChecker,
-                tailleTampon,
-                socket,
-                reception,
-                parserMessage,
-                clientChkUDP
-        ) ;
-
-        serveurUDP.gererLesClients();
-    }
 
 }

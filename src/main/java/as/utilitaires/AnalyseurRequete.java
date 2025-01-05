@@ -1,4 +1,4 @@
-package as_bis.utilitaires;
+package as.utilitaires;
 
 public class AnalyseurRequete {
     // Le métier utilisé pour traiter les requêtes clients

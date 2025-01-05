@@ -1,4 +1,4 @@
-package as_bis.clients;
+package as.clients;
 
 import java.io.BufferedReader;
 import java.io.IOException;
