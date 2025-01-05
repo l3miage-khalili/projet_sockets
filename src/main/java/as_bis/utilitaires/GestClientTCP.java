@@ -8,8 +8,13 @@ import java.net.Socket;
 
 public class GestClientTCP implements Runnable {
     private Socket socketClient ;
-    private AnalyseurRequete analyseurRequete ;
+
+    // métier utilisé pour traiter les requêtes clients
     private ListeAuth listeAuth ;
+
+    // objet utilisant le métier pour analyser les requêtes clients
+    private AnalyseurRequete analyseurRequete ;
+
     private boolean estManager ;
 
     public GestClientTCP(Socket socketClient, ListeAuth listeAuth, boolean estManager) {

@@ -53,7 +53,7 @@ public class ServeurTCP {
             }
 
         } catch (IOException e) {
-            System.err.println("Erreur lors du demarrage du serveur : " + e.getMessage());
+            System.err.println("Erreur de demarrage du serveur ou lors de la gestion d'un client : " + e.getMessage());
         }
     }
 
@@ -64,10 +64,9 @@ public class ServeurTCP {
         ListeAuth listeAuth = new ListeAuth() ;
 
         // Instanciation du serveur
-
         ServeurTCP serveurTCP = new ServeurTCP(portChk, portMng, listeAuth) ;
 
-        // demarrage du serveur
+        // demarrage du serveur et gestion des clients
         serveurTCP.demarrer();
     }
 }

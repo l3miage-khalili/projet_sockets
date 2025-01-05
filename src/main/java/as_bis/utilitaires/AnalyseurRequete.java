@@ -1,7 +1,7 @@
 package as_bis.utilitaires;
 
 public class AnalyseurRequete {
-    // Le métier utilisé pour analyser les requêtes des clients
+    // Le métier utilisé pour traiter les requêtes clients
     private ListeAuth listeAuth ;
 
     public AnalyseurRequete(ListeAuth listeAuth) {
