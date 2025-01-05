@@ -8,6 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServeurTCP {
+    /* Attributs utilisés en tant que serveur TCP */
+
     // Port des clients "checker"
     private int portChk;
 
@@ -17,10 +19,16 @@ public class ServeurTCP {
     // Le métier utilisé par le serveur
     private ListeAuth listeAuth;
 
-    public ServeurTCP(int portChk, int portMng, ListeAuth listeAuth) {
+    /* Attributs utilisés en tant que client du serveur Log */
+    private String adresseMachineLog ;
+    private int portLog ;
+
+    public ServeurTCP(int portChk, int portMng, ListeAuth listeAuth, String adresseMachineLog, int portLog) {
         this.portChk = portChk;
         this.portMng = portMng;
         this.listeAuth = listeAuth;
+        this.adresseMachineLog = adresseMachineLog ;
+        this.portLog = portLog ;
     }
 
     public void demarrer() {
@@ -49,7 +57,7 @@ public class ServeurTCP {
                 else {
                     estManager = true ;
                 }
-                new Thread(new GestClientTCP(socketClient, this.listeAuth, estManager)).start();
+                new Thread(new GestClientTCP(socketClient, this.listeAuth, estManager, this.adresseMachineLog, this.portLog)).start();
             }
 
         } catch (IOException e) {
@@ -63,8 +71,12 @@ public class ServeurTCP {
         int portMng = 28415 ;
         ListeAuth listeAuth = new ListeAuth() ;
 
+        /* configuration du client AS */
+        String adresseMachineLog = "localhost" ;
+        int portLog = 3244 ;
+
         // Instanciation du serveur
-        ServeurTCP serveurTCP = new ServeurTCP(portChk, portMng, listeAuth) ;
+        ServeurTCP serveurTCP = new ServeurTCP(portChk, portMng, listeAuth, adresseMachineLog, portLog) ;
 
         // demarrage du serveur et gestion des clients
         serveurTCP.demarrer();

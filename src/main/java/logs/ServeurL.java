@@ -33,7 +33,7 @@ public class ServeurL {
                 System.out.println("Connexion acceptée depuis " + socketClient.getInetAddress());
 
                 // Gestion du client accepté
-                gererClient(socketClient) ;
+                new Thread(() -> gererClient(socketClient)).start();
             }
         } catch (IOException e) {
             System.err.println("Erreur de demarrage du serveur ou lors de la gestion d'un client : " + e.getMessage());

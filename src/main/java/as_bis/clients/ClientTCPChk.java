@@ -44,7 +44,6 @@ public class ClientTCPChk extends ClientTCP {
         } catch (IOException e) {
             System.err.println("Erreur de communication avec le serveur TCP : " + e.getMessage());
         }
-
     }
 
     public static void main(String[] args) {
