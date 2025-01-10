@@ -1,10 +1,10 @@
 package logs;
 
+import java.io.*;
+import java.net.Socket;
 import java.util.Date;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 
 /**
  * Classe Singleton qui permet de logger des requêtes vers un serveur de log sur le port 3244 de la machine locale
@@ -14,13 +14,27 @@ import javax.json.JsonObjectBuilder;
  */
 public class JsonLogger {
 
-    // Attributs à compléter
+    // JsonWriter pour envoyer du Json à travers la connexion socket
+    private JsonWriter sortieSocketJson ;
+
+    // JsonReader pour lire du json envoyé à travers la connexion socket
+    private JsonReader entreeSocketJson ;
 
     /**
      * Constructeur à compléter
      */
     private JsonLogger() {
-
+        try {
+            // Attributs à compléter
+            String adreseeMachine = "localhost";
+            int port = 3244;
+            // Socket client
+            Socket socket = new Socket(adreseeMachine, port);
+            this.sortieSocketJson = Json.createWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.entreeSocketJson = Json.createReader(new InputStreamReader(socket.getInputStream())) ;
+        } catch (Exception e) {
+            System.err.println("Erreur d'instanciation du client JsonLogger : " + e.getMessage());
+        }
     }
 
     /**
@@ -57,7 +71,7 @@ public class JsonLogger {
      *
      * @return le logger
      */
-    private static JsonLogger getLogger() {
+    public static JsonLogger getLogger() {
         if (logger == null) {
             logger = new JsonLogger();
         }
@@ -74,8 +88,25 @@ public class JsonLogger {
      * @param login login utilisé
      * @param result résultat de l'opération
      */
-    public static void log(String host, int port, String proto, String type, String login, String result) {
+    public void log(String host, int port, String proto, String type, String login, String result) {
         JsonLogger logger = getLogger();
         // à compléter
+        try {
+            // transformation de la requête en Json
+            JsonObject jsonRequete = logger.reqToJson(host, port, proto, type, login, result) ;
+
+            // on envoie la requête sous format Json au serveur
+            sortieSocketJson.writeObject(jsonRequete);
+            System.out.println("Requête Json envoyée au serveur L : " + jsonRequete);
+
+            // lecture d'une réponse envoyée à travers la connexion socket
+            JsonObject retourServ = entreeSocketJson.readObject() ;
+            System.out.println("réponse du serveur L : " + retourServ);
+
+        } catch (Exception e) {
+            System.err.println("Erreur de log vers le serveur L : " + e.getMessage());
+        }
+
     }
+
 }

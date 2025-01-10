@@ -2,10 +2,7 @@ package as.utilitaires;
 
 import as.clients.ClientTCP;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.Socket;
 
 public class GestClientTCP extends ClientTCP implements Runnable {
@@ -23,10 +20,10 @@ public class GestClientTCP extends ClientTCP implements Runnable {
     /* Attributs utilisés en tant que client du serveur Log */
 
     // BufferedReader pour lire du texte envoyé à travers la connexion socket
-    private BufferedReader entreeSocket ;
+    private BufferedReader entreeSocket;
 
     // PrintStream pour envoyer du texte à travers la connexion socket
-    private PrintStream sortieSocket ;
+    private PrintStream sortieSocket;
 
     public GestClientTCP(Socket socketClient, ListeAuth listeAuth, boolean estManager, String adresseMachineLog, int portLog) {
         super(adresseMachineLog, portLog); // instanciation du client AS
@@ -46,6 +43,10 @@ public class GestClientTCP extends ClientTCP implements Runnable {
         }
     }
 
+    /**
+     * gère un client TCP
+     * @param estManager indique si le client géré est manager ou pas
+     */
     private void gererClient(boolean estManager) {
         try {
             // Construction d'un BufferedReader pour lire du texte envoyé à travers la connexion socket
@@ -95,10 +96,14 @@ public class GestClientTCP extends ClientTCP implements Runnable {
             this.sortieSocket = new PrintStream(sc.getOutputStream());
 
         } catch (IOException e) {
-            System.err.println("Erreur de communication avec le serveur L : " + e.getMessage());
+            System.err.println("Erreur de configuration de la communication avec le serveur L : " + e.getMessage());
         }
     }
 
+    /**
+     * log la requête vers le serveur L
+     * @param chaine chaine à logger
+     */
     private void loggerRequete(String chaine) {
         try {
             // extraction des différentes parties de la requête
@@ -125,9 +130,7 @@ public class GestClientTCP extends ClientTCP implements Runnable {
 
             // on envoie la chaine au serveur
             sortieSocket.println(chaineEnJson);
-            System.out.println("-----------------------------------------------");
             System.out.println("Chaine envoyée au serveur L : " + chaineEnJson) ;
-            System.out.println("------------------------------------------------");
 
             // lecture d'une chaine envoyée à travers la connexion socket
             String retourServ = entreeSocket.readLine();

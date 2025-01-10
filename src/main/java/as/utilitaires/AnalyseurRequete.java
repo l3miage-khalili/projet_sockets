@@ -8,6 +8,13 @@ public class AnalyseurRequete {
         this.listeAuth = listeAuth;
     }
 
+
+    /**
+     * analyse la requête passée en paramètre en utilisant le métier ListeAuth
+     * @param chaine requête à analyser
+     * @param estManager indique si la requête provient d'un client manager ou pas
+     * @return
+     */
     public String analyser(String chaine, boolean estManager) {
         String bad = "BAD" ;
         String good = "GOOD" ;

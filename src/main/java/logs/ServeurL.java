@@ -1,9 +1,6 @@
 package logs;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -11,8 +8,8 @@ import java.util.ArrayList;
 public class ServeurL {
     private int port ;
 
-    // contient les requêtes loggées par le client
-    private ArrayList<String> listeRequetes ;
+    // contient les requêtes txt loggées par le client
+    private ArrayList<String> listeRequetes;
 
     public ServeurL(int port) {
         this.port = port;
@@ -23,18 +20,14 @@ public class ServeurL {
         try {
             // Création d'un socket serveur générique sur le port
             ServerSocket ssg = new ServerSocket(port);
-            System.out.println("-----------------------------------------");
             System.out.println("Serveur L démarré sur le port " + port);
 
             while(true) {
                 // On attend une connexion puis on l'accepte
                 System.out.println("En attente de connexions...");
-                System.out.println("-----------------------------------------");
 
                 Socket socketClient = ssg.accept();
-                System.out.println("----------------------------------------------------");
                 System.out.println("Connexion acceptée depuis " + socketClient.getInetAddress());
-                System.out.println("----------------------------------------------------");
 
                 // Gestion du client accepté
                 new Thread(() -> gererClient(socketClient)).start();
@@ -53,20 +46,20 @@ public class ServeurL {
             PrintStream sortieSocket = new PrintStream(socketClient.getOutputStream());
 
             String chaine = "" ;
-            String reponse = "Requête loggée avec succès" ;
+            String reponse = "requête loggée avec succès" ;
 
             while(chaine != null) {
-                // lecture d'une chaine envoyée à travers la connexion socket
+                // lecture de la requête envoyée à travers la connexion socket
                 chaine = entreeSocket.readLine();
 
                 // si elle est nulle c'est que le client a fermé la connexion
                 if (chaine != null) {
-                    System.out.println("chaine reçue du client AS : " + chaine);
+                    System.out.println("requête txt reçue du client AS : " + chaine);
 
-                    // Enregistrement de la chaine reçue
-                    enregistrerRequete(chaine) ;
+                    // Enregistrement de la requête
+                    enregistrerRequete(chaine);
 
-                    // on envoie la chaine au client
+                    // on envoie une réponse au client
                     sortieSocket.println(reponse) ;
                 }
             }

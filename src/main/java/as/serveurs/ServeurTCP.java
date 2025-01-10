@@ -31,12 +31,20 @@ public class ServeurTCP {
         this.portLog = portLog ;
     }
 
+    /**
+     * demarre et gère les clients "checker" et "manager"
+     */
     public void demarrer() {
         // Démarrage de deux threads pour gérer les clients "checker" et "manager"
         new Thread(() -> gererClients(portChk)).start();
         new Thread(() -> gererClients(portMng)).start();
     }
 
+    /**
+     * gère les clients connectés
+     * et délègue un thread de gestion client pour chaque client connecté
+     * @param port port sur lequel un socket serveur générique est créé
+     */
     private void gererClients(int port) {
         try {
             // Création d'un socket serveur générique sur le port

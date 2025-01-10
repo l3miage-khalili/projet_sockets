@@ -14,16 +14,25 @@ public class ClientUDP {
         this.port = port ;
     }
 
+    /**
+     * demarre le client et communique avec un serveur UDP
+     */
     public void demarrer() {
         try {
             // Création d'un socket UDP sur un port choisi par le système
             DatagramSocket socket = new DatagramSocket();
+
+            // communication avec un serveur UDP
             communiquer(socket);
         } catch (Exception e) {
             System.err.println("Erreur de demarrage du client ou de communication avec le serveur : " + e.getMessage());
         }
     }
 
+    /**
+     * gère la communication avec un serveur UDP
+     * @param socket socket UDP
+     */
     public void communiquer(DatagramSocket socket) {
         try {
             // tampon pour recevoir les données des datagrammes UDP

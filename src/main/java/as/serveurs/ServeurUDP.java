@@ -21,17 +21,26 @@ public class ServeurUDP {
         this.analyseurRequete = new AnalyseurRequete(this.listeAuth) ;
     }
 
+    /**
+     * demarre le serveur UDP et gère les clients
+     */
     public void demarrer() {
         try {
             // Création d'un socket UDP sur le port du serveur
             DatagramSocket socket = new DatagramSocket(this.port);
             System.out.println("Serveur UDP demarré sur le port " + this.port);
+
+            // gestion des clients
             gererClients(socket) ;
         } catch (Exception e) {
             System.err.println("Erreur de demarrage du serveur UDP ou lors de gestion d'un client : " + e.getMessage());
         }
     }
 
+    /**
+     * gère la communication avec les clients UDP
+     * @param socket socket UDP
+     */
     private void gererClients(DatagramSocket socket) {
         try {
             int tailleTampon = 1024 ;

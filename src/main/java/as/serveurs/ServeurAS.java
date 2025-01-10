@@ -26,20 +26,26 @@ public class ServeurAS {
         this.portLog = portLog ;
     }
 
-    // demarrage d'un serveur TCP pour la gestion des clients TCP et d'un serveur UDP pour ceux d'UDP
+    /**
+     * demarre un serveur TCP pour la gestion des clients TCP et un serveur UDP pour ceux d'UDP
+     */
     public void demarrer() {
         // démarrage de deux threads pour créer les serveurs TCP et UDP
         new Thread(() -> gererServeurTCP()).start();
         new Thread(() -> gererServeurUDP()).start();
     }
 
-    // création et demarrage du serveur TCP
+    /**
+     * gère la création et le demarrage du serveur TCP
+     */
     private void gererServeurTCP() {
         ServeurTCP serveurTCP = new ServeurTCP(portChk, portMng, listeAuth, adresseMachineLog, portLog) ;
         serveurTCP.demarrer();
     }
 
-    // création et demarrage du serveur UDP
+    /**
+     * gère la création et le demarrage du serveur UDP
+     */
     private void gererServeurUDP() {
         ServeurUDP serveurUDP = new ServeurUDP(portChk, listeAuth) ;
         serveurUDP.demarrer();
